@@ -25,7 +25,7 @@ const create = factory('test');
 const createAsync = asyncFactory<State>(create);
 
 const successTest = createAsync('success', () => { /* noop */ });
-// const failureTest = createAsync('failure', () => { throw fakeError; });
+const failureTest = createAsync('failure', () => { throw fakeError; });
 
 const test1 = createAsync<Params, Succ>('test1', async ({ param }) => {
 	if (param === 2) {
@@ -262,9 +262,14 @@ describe('typescript-fsa-redux-thunk', () => {
 			]);
 		});
 
-		it('thunkToAction', async () => {
+		it('thunkToAction(successTest)', async () => {
 			const action = thunkToAction(successTest.action);
 			expect(action).to.eql(successTest.action);
+		});
+
+		it('thunkToAction(failureTest)', async () => {
+			const action = thunkToAction(failureTest.action);
+			expect(action).to.eql(failureTest.action);
 		});
 
 		it('reducer test', async () => {
